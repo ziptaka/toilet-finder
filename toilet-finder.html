@@ -20,9 +20,7 @@
     --muted: #6b7280;
     --radius: 16px;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   body {
     background: var(--bg);
     color: var(--text);
@@ -32,279 +30,198 @@
     flex-direction: column;
     overflow: hidden;
   }
-
-  /* Header */
   header {
-    padding: 14px 20px;
+    padding: 12px 16px;
     background: var(--surface);
     border-bottom: 1px solid #ffffff0f;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     z-index: 1000;
     flex-shrink: 0;
   }
-
   .logo {
     font-family: 'Zen Maru Gothic', sans-serif;
     font-weight: 900;
-    font-size: 22px;
+    font-size: 20px;
     background: linear-gradient(135deg, var(--accent), #00d4ff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    letter-spacing: -0.5px;
   }
+  .logo-icon { font-size: 24px; animation: bounce 2s ease-in-out infinite; }
+  @keyframes bounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-4px)} }
 
-  .logo-icon {
-    font-size: 26px;
-    animation: bounce 2s ease-in-out infinite;
-  }
+  .main { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  #map { flex: 1; min-height: 0; z-index: 1; }
 
-  @keyframes bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
-  }
-
-  /* Main layout */
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* Map */
-  #map {
-    flex: 1;
-    min-height: 0;
-    position: relative;
-    z-index: 1;
-  }
-
-  /* Panel */
   .panel {
     background: var(--surface);
     border-top: 1px solid #ffffff10;
-    padding: 14px 16px;
+    padding: 12px 14px;
     flex-shrink: 0;
-    max-height: 45%;
+    max-height: 50%;
     overflow-y: auto;
   }
 
-  /* Search button */
+  /* Filter toggles */
+  .filter-row {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 5px 10px;
+    border-radius: 20px;
+    border: 1.5px solid #ffffff20;
+    background: var(--surface2);
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'Zen Maru Gothic', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .filter-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: #4fffb015;
+  }
+  .filter-btn.active.pachinko { border-color: #ff6b6b; color: #ff6b6b; background: #ff6b6b15; }
+  .filter-btn.active.convenience { border-color: #00d4ff; color: #00d4ff; background: #00d4ff15; }
+  .filter-btn.active.supermarket { border-color: #ffd166; color: #ffd166; background: #ffd16615; }
+
+  .radius-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .radius-control label { white-space: nowrap; }
+  input[type=range] { flex: 1; accent-color: var(--accent); cursor: pointer; }
+  .radius-val { font-weight: 700; color: var(--accent); min-width: 50px; text-align: right; }
+
   .btn-search {
     width: 100%;
-    padding: 14px;
+    padding: 13px;
     background: linear-gradient(135deg, var(--accent), #00d4ff);
     color: #0f1117;
     border: none;
     border-radius: var(--radius);
     font-family: 'Zen Maru Gothic', sans-serif;
     font-weight: 700;
-    font-size: 16px;
+    font-size: 15px;
     cursor: pointer;
     transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    letter-spacing: 0.3px;
   }
-
   .btn-search:hover { opacity: 0.9; transform: translateY(-1px); }
   .btn-search:active { transform: translateY(0); }
   .btn-search:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
-  /* Status */
   .status {
     text-align: center;
-    padding: 10px;
+    padding: 8px;
     font-size: 13px;
     color: var(--muted);
-    min-height: 36px;
+    min-height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
   }
-
   .status.loading { color: var(--accent); }
   .status.error { color: var(--accent2); }
   .status.success { color: var(--accent); }
 
-  .spinner {
-    width: 14px; height: 14px;
-    border: 2px solid currentColor;
-    border-top-color: transparent;
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    display: none;
-  }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* Toilet list */
   .section-title {
     font-family: 'Zen Maru Gothic', sans-serif;
-    font-size: 13px;
+    font-size: 12px;
     color: var(--muted);
     font-weight: 700;
-    text-transform: uppercase;
     letter-spacing: 1px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+    text-transform: uppercase;
   }
 
-  .toilet-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  .place-list { display: flex; flex-direction: column; gap: 7px; }
 
-  .toilet-item {
+  .place-item {
     background: var(--surface2);
     border-radius: 12px;
-    padding: 12px 14px;
+    padding: 10px 12px;
     cursor: pointer;
     transition: all 0.15s;
     border: 1px solid transparent;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
   }
+  .place-item:hover { border-color: var(--accent); transform: translateX(3px); }
+  .place-item.active { border-color: var(--accent); background: #4fffb01a; }
 
-  .toilet-item:hover {
-    border-color: var(--accent);
-    transform: translateX(3px);
-  }
-
-  .toilet-item.active {
-    border-color: var(--accent);
-    background: #4fffb01a;
-  }
-
-  .toilet-icon-wrap {
-    width: 40px; height: 40px;
+  .place-icon-wrap {
+    width: 38px; height: 38px;
     border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
+    font-size: 19px;
     flex-shrink: 0;
   }
+  .type-toilet  .place-icon-wrap { background: #4fffb020; }
+  .type-pachinko .place-icon-wrap { background: #ff6b6b20; }
+  .type-convenience .place-icon-wrap { background: #00d4ff20; }
+  .type-supermarket .place-icon-wrap { background: #ffd16620; }
 
-  .toilet-icon-wrap.public { background: #4fffb020; }
-  .toilet-icon-wrap.private { background: #ffd16620; }
-  .toilet-icon-wrap.unknown { background: #6b728020; }
-
-  .toilet-info { flex: 1; min-width: 0; }
-
-  .toilet-name {
+  .place-info { flex: 1; min-width: 0; }
+  .place-name {
     font-family: 'Zen Maru Gothic', sans-serif;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-bottom: 3px;
   }
+  .place-meta { font-size: 11px; color: var(--muted); display: flex; gap: 6px; flex-wrap: wrap; }
 
-  .toilet-meta {
-    font-size: 12px;
-    color: var(--muted);
+  .badge { padding: 2px 7px; border-radius: 20px; font-size: 10px; font-weight: 700; }
+  .badge-dist { background: #4fffb020; color: var(--accent); }
+  .badge-toilet { background: #4fffb020; color: var(--accent); }
+  .badge-pachinko { background: #ff6b6b20; color: #ff6b6b; }
+  .badge-convenience { background: #00d4ff20; color: #00d4ff; }
+  .badge-supermarket { background: #ffd16620; color: #ffd166; }
+  .badge-fee { background: #ff6b6b20; color: var(--accent2); }
+  .badge-accessible { background: #00d4ff20; color: #00d4ff; }
+
+  /* Legend */
+  .legend {
     display: flex;
-    gap: 10px;
+    gap: 12px;
     flex-wrap: wrap;
-  }
-
-  .badge {
-    padding: 2px 8px;
-    border-radius: 20px;
+    margin-bottom: 8px;
     font-size: 11px;
-    font-weight: 600;
-  }
-
-  .badge-dist {
-    background: #4fffb020;
-    color: var(--accent);
-  }
-
-  .badge-fee {
-    background: #ff6b6b20;
-    color: var(--accent2);
-  }
-
-  .badge-accessible {
-    background: #00d4ff20;
-    color: #00d4ff;
-  }
-
-  .badge-open {
-    background: #ffd16620;
-    color: var(--accent3);
-  }
-
-  /* Empty state */
-  .empty {
-    text-align: center;
-    padding: 30px 20px;
     color: var(--muted);
   }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
 
-  .empty-icon { font-size: 40px; margin-bottom: 10px; }
-  .empty p { font-size: 14px; line-height: 1.6; }
-
-  /* Leaflet overrides */
   .leaflet-container { background: #1a1d2e; }
   .leaflet-tile { filter: brightness(0.85) saturate(0.9); }
-
-  .custom-marker {
-    background: var(--accent);
-    border: 3px solid #0f1117;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px var(--accent), 0 4px 12px rgba(79,255,176,0.4);
-  }
-
-  .user-marker {
-    background: #ff6b6b;
-    border: 3px solid #0f1117;
-    border-radius: 50%;
-    box-shadow: 0 0 0 2px #ff6b6b, 0 4px 12px rgba(255,107,107,0.5);
-  }
-
   .leaflet-popup-content-wrapper {
-    background: var(--surface2);
-    color: var(--text);
-    border: 1px solid #ffffff15;
-    border-radius: 12px;
+    background: var(--surface2); color: var(--text);
+    border: 1px solid #ffffff15; border-radius: 12px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.4);
   }
-
   .leaflet-popup-tip { background: var(--surface2); }
-  .leaflet-popup-content { margin: 12px 14px; font-size: 13px; line-height: 1.6; }
+  .leaflet-popup-content { margin: 10px 12px; font-size: 12px; line-height: 1.6; }
   .leaflet-popup-content b { color: var(--accent); font-family: 'Zen Maru Gothic', sans-serif; }
-
-  /* Radius slider */
-  .radius-control {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 12px;
-    font-size: 13px;
-    color: var(--muted);
-  }
-
-  .radius-control label { white-space: nowrap; }
-
-  input[type=range] {
-    flex: 1;
-    accent-color: var(--accent);
-    cursor: pointer;
-  }
-
-  .radius-val {
-    font-weight: 700;
-    color: var(--accent);
-    min-width: 50px;
-    text-align: right;
-  }
 </style>
 </head>
 <body>
@@ -318,33 +235,90 @@
   <div id="map"></div>
 
   <div class="panel">
+    <!-- Filter buttons -->
+    <div class="filter-row">
+      <button class="filter-btn active" id="f-toilet" onclick="toggleFilter('toilet')">🚻 公衆トイレ</button>
+      <button class="filter-btn active pachinko" id="f-pachinko" onclick="toggleFilter('pachinko')">🎰 パチンコ</button>
+      <button class="filter-btn active convenience" id="f-convenience" onclick="toggleFilter('convenience')">🏪 コンビニ</button>
+      <button class="filter-btn active supermarket" id="f-supermarket" onclick="toggleFilter('supermarket')">🛒 スーパー</button>
+    </div>
+
     <div class="radius-control">
       <label>検索範囲</label>
       <input type="range" id="radius" min="200" max="2000" step="100" value="500">
       <span class="radius-val" id="radiusVal">500m</span>
     </div>
-    <button class="btn-search" id="btnSearch" onclick="searchToilets()">
-      <span>📍</span> 現在地から近くのトイレを探す
+
+    <button class="btn-search" id="btnSearch" onclick="searchAll()">
+      <span>📍</span> 現在地から探す
     </button>
+
     <div class="status" id="status"></div>
     <div id="listArea"></div>
   </div>
 </div>
 
 <script>
-  // Map init
   const map = L.map('map', { zoomControl: true }).setView([35.6812, 139.7671], 14);
   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors',
-    maxZoom: 19
+    attribution: '© OpenStreetMap contributors', maxZoom: 19
   }).addTo(map);
 
   let userMarker = null;
-  let toiletMarkers = [];
+  let allMarkers = [];
   let userLatLng = null;
   let activeIndex = -1;
+  let allPlaces = [];
 
-  // Radius slider
+  // Filter state
+  const filters = { toilet: true, pachinko: true, convenience: true, supermarket: true };
+
+  // Marker colors per type
+  const TYPE_COLORS = {
+    toilet: '#4fffb0',
+    pachinko: '#ff6b6b',
+    convenience: '#00d4ff',
+    supermarket: '#ffd166'
+  };
+
+  const TYPE_LABELS = {
+    toilet: '🚻 公衆トイレ',
+    pachinko: '🎰 パチンコ',
+    convenience: '🏪 コンビニ',
+    supermarket: '🛒 スーパー'
+  };
+
+  const TYPE_BADGE = {
+    toilet: 'badge-toilet',
+    pachinko: 'badge-pachinko',
+    convenience: 'badge-convenience',
+    supermarket: 'badge-supermarket'
+  };
+
+  function toggleFilter(type) {
+    filters[type] = !filters[type];
+    const btn = document.getElementById('f-' + type);
+    if (filters[type]) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+    renderList(allPlaces);
+    updateMarkerVisibility();
+  }
+
+  function updateMarkerVisibility() {
+    allMarkers.forEach((m, i) => {
+      const p = allPlaces[i];
+      if (!p) return;
+      if (filters[p.type]) {
+        if (!map.hasLayer(m)) map.addLayer(m);
+      } else {
+        if (map.hasLayer(m)) map.removeLayer(m);
+      }
+    });
+  }
+
   const radiusSlider = document.getElementById('radius');
   const radiusVal = document.getElementById('radiusVal');
   radiusSlider.oninput = () => { radiusVal.textContent = radiusSlider.value + 'm'; };
@@ -376,39 +350,43 @@
     return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
   }
 
-  async function searchToilets() {
+  async function searchAll() {
     const btn = document.getElementById('btnSearch');
     btn.disabled = true;
     setStatus('📡 現在地を取得中...', 'loading');
 
-    // Clear old markers
-    toiletMarkers.forEach(m => map.removeLayer(m));
-    toiletMarkers = [];
+    allMarkers.forEach(m => map.removeLayer(m));
+    allMarkers = [];
+    allPlaces = [];
     document.getElementById('listArea').innerHTML = '';
     activeIndex = -1;
 
     navigator.geolocation.getCurrentPosition(async pos => {
       userLatLng = [pos.coords.latitude, pos.coords.longitude];
+      const [lat, lng] = userLatLng;
+      const radius = parseInt(radiusSlider.value);
 
-      // User marker
       if (userMarker) map.removeLayer(userMarker);
-      userMarker = L.marker(userLatLng, { icon: makeIcon('#ff6b6b', 16) })
+      userMarker = L.marker(userLatLng, { icon: makeIcon('#ffffff', 16) })
         .addTo(map)
         .bindPopup('<b>📍 現在地</b>');
-
       map.setView(userLatLng, 16);
 
-      setStatus('🔍 トイレを検索中...', 'loading');
+      setStatus('🔍 検索中...', 'loading');
 
-      const radius = parseInt(radiusSlider.value);
-      const [lat, lng] = userLatLng;
-
-      // Overpass API query
+      // Overpass query - toilets (public), pachinko, convenience+toilet, supermarket+toilet
       const query = `
-        [out:json][timeout:15];
+        [out:json][timeout:20];
         (
           node["amenity"="toilets"](around:${radius},${lat},${lng});
           way["amenity"="toilets"](around:${radius},${lat},${lng});
+          node["leisure"="adult_gaming_centre"](around:${radius},${lat},${lng});
+          node["amenity"="casino"]["gambling"="pachinko"](around:${radius},${lat},${lng});
+          node["shop"="pachinko"](around:${radius},${lat},${lng});
+          node["amenity"="convenience"]["toilets"="yes"](around:${radius},${lat},${lng});
+          node["shop"="convenience"]["toilets"="yes"](around:${radius},${lat},${lng});
+          node["shop"="supermarket"]["toilets"="yes"](around:${radius},${lat},${lng});
+          node["shop"="grocery"]["toilets"="yes"](around:${radius},${lat},${lng});
         );
         out center tags;
       `;
@@ -422,36 +400,50 @@
         const elements = json.elements || [];
 
         if (elements.length === 0) {
-          setStatus(`😢 半径${radius}m以内にトイレが見つかりませんでした`, 'error');
+          setStatus(`😢 半径${radius}m以内に何も見つかりませんでした`, 'error');
           btn.disabled = false;
           return;
         }
 
-        // Build toilet list with distance
-        const toilets = elements.map(el => {
-          const tlat = el.lat ?? el.center?.lat;
-          const tlng = el.lon ?? el.center?.lon;
-          const d = dist(lat, lng, tlat, tlng);
+        // Classify each element
+        const places = elements.map(el => {
+          const plat = el.lat ?? el.center?.lat;
+          const plng = el.lon ?? el.center?.lon;
+          const d = dist(lat, lng, plat, plng);
           const tags = el.tags || {};
-          return { lat: tlat, lng: tlng, d, tags };
-        }).sort((a,b) => a.d - b.d);
+          let type = 'toilet';
+          if (tags.amenity === 'toilets') type = 'toilet';
+          else if (tags.leisure === 'adult_gaming_centre' || tags.shop === 'pachinko' || tags['gambling'] === 'pachinko') type = 'pachinko';
+          else if (tags.amenity === 'convenience' || tags.shop === 'convenience') type = 'convenience';
+          else if (tags.shop === 'supermarket' || tags.shop === 'grocery') type = 'supermarket';
+          return { lat: plat, lng: plng, d, tags, type };
+        }).sort((a, b) => a.d - b.d);
 
-        setStatus(`✅ ${toilets.length}件のトイレが見つかりました！`, 'success');
+        allPlaces = places;
 
-        // Markers
-        toilets.forEach((t, i) => {
-          const marker = L.marker([t.lat, t.lng], { icon: makeIcon('#4fffb0', 14) })
+        // Count by type
+        const counts = { toilet: 0, pachinko: 0, convenience: 0, supermarket: 0 };
+        places.forEach(p => counts[p.type]++);
+        const summary = Object.entries(counts)
+          .filter(([,v]) => v > 0)
+          .map(([k, v]) => `${TYPE_LABELS[k].split(' ')[0]}${v}件`)
+          .join(' ');
+        setStatus(`✅ ${summary} 見つかりました！`, 'success');
+
+        // Create markers
+        places.forEach((p, i) => {
+          const color = TYPE_COLORS[p.type];
+          const marker = L.marker([p.lat, p.lng], { icon: makeIcon(color, 14) })
             .addTo(map)
-            .bindPopup(popupHtml(t));
+            .bindPopup(popupHtml(p));
           marker.on('click', () => activateItem(i));
-          toiletMarkers.push(marker);
+          allMarkers.push(marker);
         });
 
-        // List
-        renderList(toilets);
+        updateMarkerVisibility();
+        renderList(places);
 
-        // Fit bounds
-        const bounds = L.latLngBounds([userLatLng, ...toilets.slice(0,10).map(t => [t.lat, t.lng])]);
+        const bounds = L.latLngBounds([userLatLng, ...places.slice(0, 15).map(p => [p.lat, p.lng])]);
         map.fitBounds(bounds, { padding: [40, 40], maxZoom: 17 });
 
       } catch(e) {
@@ -460,50 +452,54 @@
 
       btn.disabled = false;
     }, err => {
-      const msgs = {1:'位置情報へのアクセスが拒否されました', 2:'位置情報を取得できませんでした', 3:'タイムアウトしました'};
+      const msgs = { 1:'位置情報へのアクセスが拒否されました', 2:'位置情報を取得できませんでした', 3:'タイムアウトしました' };
       setStatus('⚠️ ' + (msgs[err.code] || '不明なエラー'), 'error');
       btn.disabled = false;
     }, { enableHighAccuracy: true, timeout: 10000 });
   }
 
-  function popupHtml(t) {
-    const tags = t.tags;
-    const name = tags.name || tags['name:ja'] || 'トイレ';
+  function popupHtml(p) {
+    const tags = p.tags;
+    const name = tags.name || tags['name:ja'] || TYPE_LABELS[p.type];
     const fee = tags.fee === 'yes' ? '💴 有料' : tags.fee === 'no' ? '🆓 無料' : '';
-    const access = tags.wheelchair === 'yes' ? '♿ 車椅子対応' : '';
+    const accessible = tags.wheelchair === 'yes' ? '♿ 車椅子対応' : '';
     const open = tags.opening_hours ? `🕐 ${tags.opening_hours}` : '';
-    return `<b>🚻 ${name}</b><br>${[fee, access, open].filter(Boolean).join('<br>') || '詳細情報なし'}`;
+    const emoji = { toilet:'🚻', pachinko:'🎰', convenience:'🏪', supermarket:'🛒' }[p.type];
+    const details = [fee, accessible, open].filter(Boolean).join('<br>');
+    return `<b>${emoji} ${name}</b><br>${details || '詳細情報なし'}`;
   }
 
-  function renderList(toilets) {
+  function renderList(places) {
     const area = document.getElementById('listArea');
-    area.innerHTML = `<div class="section-title" style="margin-bottom:10px;">近くのトイレ ${toilets.length}件</div><div class="toilet-list" id="toiletList"></div>`;
-    const list = document.getElementById('toiletList');
+    const visible = places.filter(p => filters[p.type]);
+    if (visible.length === 0 && places.length > 0) {
+      area.innerHTML = `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">フィルターをオンにして表示</div>`;
+      return;
+    }
+    area.innerHTML = `<div class="section-title" style="margin-top:8px;">検索結果 ${visible.length}件</div><div class="place-list" id="placeList"></div>`;
+    const list = document.getElementById('placeList');
 
-    toilets.forEach((t, i) => {
-      const tags = t.tags;
-      const name = tags.name || tags['name:ja'] || `トイレ #${i+1}`;
+    places.forEach((p, i) => {
+      if (!filters[p.type]) return;
+      const tags = p.tags;
+      const name = tags.name || tags['name:ja'] || TYPE_LABELS[p.type];
       const fee = tags.fee === 'yes';
       const accessible = tags.wheelchair === 'yes';
-      const hasHours = !!tags.opening_hours;
-      const access = tags.access || 'public';
-
-      const iconType = access === 'private' ? 'private' : access === 'customers' ? 'private' : 'public';
-      const iconEmoji = iconType === 'private' ? '🔒' : '🚻';
-      const iconClass = `toilet-icon-wrap ${iconType}`;
+      const emoji = { toilet:'🚻', pachinko:'🎰', convenience:'🏪', supermarket:'🛒' }[p.type];
 
       const item = document.createElement('div');
-      item.className = 'toilet-item';
-      item.id = `ti-${i}`;
+      item.className = `place-item type-${p.type}`;
+      item.id = `pi-${i}`;
       item.innerHTML = `
-        <div class="${iconClass}">${iconEmoji}</div>
-        <div class="toilet-info">
-          <div class="toilet-name">${name}</div>
-          <div class="toilet-meta">
-            <span class="badge badge-dist">📍 ${distStr(t.d)}</span>
-            ${fee ? '<span class="badge badge-fee">有料</span>' : '<span class="badge" style="background:#4fffb020;color:var(--accent)">無料</span>'}
+        <div class="place-icon-wrap">${emoji}</div>
+        <div class="place-info">
+          <div class="place-name">${name}</div>
+          <div class="place-meta">
+            <span class="badge badge-dist">📍 ${distStr(p.d)}</span>
+            <span class="badge ${TYPE_BADGE[p.type]}">${TYPE_LABELS[p.type].split(' ')[1]}</span>
+            ${p.type === 'convenience' || p.type === 'supermarket' ? '<span class="badge badge-toilet">🚻 トイレあり</span>' : ''}
+            ${fee ? '<span class="badge badge-fee">有料</span>' : ''}
             ${accessible ? '<span class="badge badge-accessible">♿</span>' : ''}
-            ${hasHours ? '<span class="badge badge-open">時間制限あり</span>' : ''}
           </div>
         </div>
       `;
@@ -513,26 +509,21 @@
   }
 
   function activateItem(i) {
-    // Deactivate previous
     if (activeIndex >= 0) {
-      const prev = document.getElementById(`ti-${activeIndex}`);
+      const prev = document.getElementById(`pi-${activeIndex}`);
       if (prev) prev.classList.remove('active');
-      if (toiletMarkers[activeIndex]) {
-        toiletMarkers[activeIndex].setIcon(makeIcon('#4fffb0', 14));
-        toiletMarkers[activeIndex].closePopup();
+      if (allMarkers[activeIndex] && allPlaces[activeIndex]) {
+        allMarkers[activeIndex].setIcon(makeIcon(TYPE_COLORS[allPlaces[activeIndex].type], 14));
+        allMarkers[activeIndex].closePopup();
       }
     }
-    // Activate new
     activeIndex = i;
-    const item = document.getElementById(`ti-${i}`);
-    if (item) {
-      item.classList.add('active');
-      item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-    if (toiletMarkers[i]) {
-      toiletMarkers[i].setIcon(makeIcon('#ffd166', 18));
-      toiletMarkers[i].openPopup();
-      map.panTo(toiletMarkers[i].getLatLng(), { animate: true });
+    const item = document.getElementById(`pi-${i}`);
+    if (item) { item.classList.add('active'); item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+    if (allMarkers[i]) {
+      allMarkers[i].setIcon(makeIcon('#ffffff', 18));
+      allMarkers[i].openPopup();
+      map.panTo(allMarkers[i].getLatLng(), { animate: true });
     }
   }
 </script>
