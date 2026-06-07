@@ -409,35 +409,44 @@
         out center tags;
       `;
 
-      const servers = [
-        'https://overpass-api.de/api/interpreter',
-        'https://overpass.kumi.systems/api/interpreter',
+      const queries = [
+        { type: 'toilet',      q: `[out:json][timeout:15];(node["amenity"="toilets"](around:${radius},${lat},${lng});way["amenity"="toilets"](around:${radius},${lat},${lng}););out center tags;` },
+        { type: 'pachinko',    q: `[out:json][timeout:15];(node["shop"="pachinko"](around:${radius},${lat},${lng});node["leisure"="adult_gaming_centre"](around:${radius},${lat},${lng}););out center tags;` },
+        { type: 'convenience', q: `[out:json][timeout:15];(node["shop"="convenience"](around:${radius},${lat},${lng}););out center tags;` },
+        { type: 'supermarket', q: `[out:json][timeout:15];(node["shop"="supermarket"](around:${radius},${lat},${lng}););out center tags;` },
       ];
 
-      let json = null;
-      for (const server of servers) {
+      const SERVER = 'https://overpass-api.de/api/interpreter';
+
+      async function overpassFetch(q) {
+        const controller = new AbortController();
+        const timer = setTimeout(() => controller.abort(), 20000);
         try {
-          setStatus(`🔍 検索中... (${server.includes('kumi') ? 'サーバー2' : 'サーバー1'})`, 'loading');
-          const controller = new AbortController();
-          const timer = setTimeout(() => controller.abort(), 25000);
-          const res = await fetch(server, {
+          const res = await fetch(SERVER, {
             method: 'POST',
-            body: 'data=' + encodeURIComponent(query),
+            body: 'data=' + encodeURIComponent(q),
             signal: controller.signal
           });
           clearTimeout(timer);
           if (!res.ok) throw new Error(`HTTP ${res.status}`);
-          json = await res.json();
-          break;
+          return await res.json();
         } catch(e) {
-          setStatus(`⚠️ サーバー切替中...`, 'loading');
-          continue;
+          clearTimeout(timer);
+          return { elements: [] };
         }
       }
 
       try {
-        if (!json) throw new Error('全サーバー失敗');
-        const elements = json.elements || [];
+        let allElements = [];
+        for (let i = 0; i < queries.length; i++) {
+          const { type, q } = queries[i];
+          setStatus(`🔍 検索中... (${i+1}/${queries.length})`, 'loading');
+          const json = await overpassFetch(q);
+          const typed = (json.elements || []).map(el => ({ ...el, _type: type }));
+          allElements = allElements.concat(typed);
+        }
+
+        const elements = allElements;
 
         if (elements.length === 0) {
           setStatus(`😢 半径${radius}m以内に何も見つかりませんでした`, 'error');
@@ -451,12 +460,7 @@
           const plng = el.lon ?? el.center?.lon;
           const d = dist(lat, lng, plat, plng);
           const tags = el.tags || {};
-          let type = 'toilet';
-          if (tags.amenity === 'toilets') type = 'toilet';
-          else if (tags.leisure === 'adult_gaming_centre' || tags.shop === 'pachinko' || tags['gambling'] === 'pachinko') type = 'pachinko';
-          else if (tags.amenity === 'convenience' || tags.shop === 'convenience') type = 'convenience';
-          else if (tags.shop === 'supermarket' || tags.shop === 'grocery') type = 'supermarket';
-          return { lat: plat, lng: plng, d, tags, type };
+          return { lat: plat, lng: plng, d, tags, type: el._type };
         }).sort((a, b) => a.d - b.d);
 
         allPlaces = places;
