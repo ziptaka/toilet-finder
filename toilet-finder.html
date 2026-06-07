@@ -576,6 +576,43 @@
     });
   }
 
+  let routeLayer = null;
+
+  function clearRoute() {
+    if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+  }
+
+  async function showRoute(i) {
+    const p = allPlaces[i];
+    if (!p || !userLatLng) return;
+    clearRoute();
+
+    const [ulat, ulng] = userLatLng;
+    const url = `https://router.project-osrm.org/route/v1/foot/${ulng},${ulat};${p.lng},${p.lat}?overview=full&geometries=geojson`;
+
+    try {
+      const res = await fetch(url);
+      const json = await res.json();
+      if (!json.routes || json.routes.length === 0) return;
+
+      const coords = json.routes[0].geometry.coordinates.map(c => [c[1], c[0]]);
+      const duration = Math.ceil(json.routes[0].duration / 60);
+      const distance = Math.round(json.routes[0].distance);
+
+      routeLayer = L.polyline(coords, {
+        color: '#4fffb0',
+        weight: 4,
+        opacity: 0.85,
+        dashArray: '8, 6'
+      }).addTo(map);
+
+      map.fitBounds(routeLayer.getBounds(), { padding: [40, 40] });
+      setStatus(`🚶 徒歩約${duration}分 / ${distStr(distance)}`, 'success');
+    } catch(e) {
+      setStatus('❌ ルート取得に失敗しました', 'error');
+    }
+  }
+
   function activateItem(i) {
     if (activeIndex >= 0) {
       const prev = document.getElementById(`pi-${activeIndex}`);
@@ -585,6 +622,7 @@
         allMarkers[activeIndex].closePopup();
       }
     }
+    clearRoute();
     activeIndex = i;
     const item = document.getElementById(`pi-${i}`);
     if (item) { item.classList.add('active'); item.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
@@ -593,6 +631,23 @@
       allMarkers[i].openPopup();
       map.panTo(allMarkers[i].getLatLng(), { animate: true });
     }
+    // Show route button in popup
+    setTimeout(() => {
+      const popupEl = document.querySelector('.leaflet-popup-content');
+      if (popupEl && !popupEl.querySelector('.btn-route')) {
+        const btn = document.createElement('button');
+        btn.className = 'btn-route';
+        btn.textContent = '🚶 ルートを表示';
+        btn.style.cssText = `
+          margin-top:8px; width:100%; padding:6px 10px;
+          background:#4fffb0; color:#0f1117; border:none;
+          border-radius:8px; font-weight:700; font-size:12px;
+          cursor:pointer; font-family:'Zen Maru Gothic',sans-serif;
+        `;
+        btn.onclick = () => showRoute(i);
+        popupEl.appendChild(btn);
+      }
+    }, 50);
   }
 </script>
 </body>
