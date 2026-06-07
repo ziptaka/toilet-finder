@@ -383,10 +383,10 @@
           node["leisure"="adult_gaming_centre"](around:${radius},${lat},${lng});
           node["amenity"="casino"]["gambling"="pachinko"](around:${radius},${lat},${lng});
           node["shop"="pachinko"](around:${radius},${lat},${lng});
-          node["amenity"="convenience"]["toilets"="yes"](around:${radius},${lat},${lng});
-          node["shop"="convenience"]["toilets"="yes"](around:${radius},${lat},${lng});
-          node["shop"="supermarket"]["toilets"="yes"](around:${radius},${lat},${lng});
-          node["shop"="grocery"]["toilets"="yes"](around:${radius},${lat},${lng});
+          node["amenity"="convenience"](around:${radius},${lat},${lng});
+          node["shop"="convenience"](around:${radius},${lat},${lng});
+          node["shop"="supermarket"](around:${radius},${lat},${lng});
+          node["shop"="grocery"](around:${radius},${lat},${lng});
         );
         out center tags;
       `;
@@ -497,7 +497,13 @@
           <div class="place-meta">
             <span class="badge badge-dist">📍 ${distStr(p.d)}</span>
             <span class="badge ${TYPE_BADGE[p.type]}">${TYPE_LABELS[p.type].split(' ')[1]}</span>
-            ${p.type === 'convenience' || p.type === 'supermarket' ? '<span class="badge badge-toilet">🚻 トイレあり</span>' : ''}
+            ${p.type === 'convenience' || p.type === 'supermarket'
+              ? tags.toilets === 'yes'
+                ? '<span class="badge badge-toilet">🚻 トイレあり</span>'
+                : tags.toilets === 'no'
+                  ? '<span class="badge" style="background:#ff6b6b20;color:#ff6b6b">🚻 トイレなし</span>'
+                  : '<span class="badge" style="background:#6b728030;color:#9ca3af">🚻 トイレ不明</span>'
+              : ''}
             ${fee ? '<span class="badge badge-fee">有料</span>' : ''}
             ${accessible ? '<span class="badge badge-accessible">♿</span>' : ''}
           </div>
